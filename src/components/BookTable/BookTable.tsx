@@ -5,6 +5,7 @@ import styles from './BookTable.module.scss';
 import loadingGif from './images/loading.gif';
 import { TableHeaderProps } from 'react-virtualized/dist/es/Table';
 import { filteredHeader } from '../TableHeaderFilter';
+import md5 from 'md5';
 
 export enum Genders {
   male = 'male',
@@ -156,7 +157,7 @@ const BookTable: React.FC<IBookTableProps> = ({
               cellRenderer={({cellData, rowData, rowIndex}) => {
                 let img = rowData.image.replace(/460\/640$/, '34/48');
                 return <>
-                  <img src={`${img}?${rowIndex}`} width={17} height={24} alt={cellData} /> {cellData}
+                  <img src={`${img}?${md5(JSON.stringify(rowData))}`} width={17} height={24} alt={cellData} /> {cellData}
                 </>
               }}
             />
