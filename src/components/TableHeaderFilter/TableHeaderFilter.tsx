@@ -64,8 +64,15 @@ const TableHeaderFilter: React.FC<IHeaderFilterProps> = ({dataKey, data}) => {
       onClick={event => event.stopPropagation()}
       ref={(ref) => containerRef.current = ref}
     >
-      <span className={styles['BookTable-filter-trigger']} title="Filter by this column...">
-        <img src="/filter.svg" alt="Filter" onClick={(event) => setVisible(true)} />
+      <span 
+        className={styles['BookTable-filter-trigger']} 
+        title="Filter by this column..."
+        onClick={(event) => setVisible(true)}
+      >
+        <img src="/filter.svg" alt="Filter" />
+        {currentFilters.length ? (
+          <div className={styles['BookTable-filter-trigger-count']}>{currentFilters.length}</div>
+        ) : null}
       </span>
       {visible ? (
         <div className={styles['BookTable-filter-menu']}>

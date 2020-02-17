@@ -30,84 +30,19 @@ export interface IBookTableProps {
   filters: {
     [prop: string]: string[]
   };
+  filterGenres: string[];
+  filterSexes: string[];
   filterFunctions?: {
     [prop: string]: (value: IBook, haystack: string[]) => boolean
   }
 }
 
-// Memo container for sorted lists
-export interface IListMemo {
-  [prop: string]: any
-}
-let listMemo: IListMemo = {};
-
-// Collect genres and sexes after data loads
-let firstRun: boolean = true;
-let filterGenres: string[] = [];
-let filterSexes: string[] = [];
-
 const BookTable: React.FC<IBookTableProps> = ({
-  filters, filterFunctions, list, loading, sort, sortBy, sortDirection
+  filterSexes, filterGenres, list, loading, sort, sortBy, sortDirection
 }) => {
   let loadingClass = styles['BookTable-loading'] + (
     loading ? ' '+styles['BookTable-loading-visible'] : ''
   );
-
-  let listMemoKey = `${sortBy} ${sortDirection}`;
-
-  // Add filter values to memo key
-  const filterKeys = Object.keys(filters);
-  filterKeys.forEach((key:string) => {
-    if(filters[key].length) listMemoKey += ` ${key}:${filters[key].join('|')}`;
-  });
-
-  // Memorize the sort result so it doesn't do it everytime.
-  let bookList:IBook[] = listMemo[listMemoKey];
-
-  // This could be refactored to separate function because looks ugly here.
-  if(!bookList || !bookList.length) {
-    console.log(`No memo for '${listMemoKey}', doin' it...`);
-
-    let dir = sortDirection === SortDirection.DESC ? -1 : 1;
-
-    // Clone list so we don't have reference.
-    bookList = [...list];
-
-    // Apply filters
-    if(filterKeys.length) {
-      bookList = bookList.filter((value: IBook) => {
-        let show: boolean = true;
-
-        filterKeys.forEach((key: string) => {
-          let func = filterFunctions && typeof(filterFunctions[key]) === 'function' ? filterFunctions[key] : (value: IBook, haystack: string[]): boolean => {
-            return haystack.indexOf(value[key]) > -1;
-          };
-
-          if(show && filters[key]) show = func(value, filters[key]);
-        });
-
-        return show;
-      });
-    }
-
-    bookList.sort((a, b) => {
-      // Collect genres and sexes
-      if(firstRun && filterGenres.indexOf(a['genre']) < 0)
-        filterGenres.push(a['genre']);
-      
-      if(firstRun && filterSexes.indexOf(a['author']['gender']) < 0)
-        filterSexes.push(a['author']['gender']);
-      
-      if(a===b) return 0;
-      return a[sortBy] > b[sortBy] ? dir : -dir
-    });
-
-    filterGenres.sort();
-    filterSexes.sort();
-    
-    listMemo[listMemoKey] = bookList;
-    if(bookList.length) firstRun = false;
-  }
 
 	return (
     <section role="table" className={styles['BookTable']}>
@@ -121,7 +56,7 @@ const BookTable: React.FC<IBookTableProps> = ({
             height={height}
             headerHeight={40}
             rowHeight={40}
-            rowCount={bookList.length}
+            rowCount={list.length}
             sort={sort}
             sortBy={sortBy}
             sortDirection={sortDirection}
@@ -142,7 +77,7 @@ const BookTable: React.FC<IBookTableProps> = ({
             }}
             headerClassName={styles['BookTable-headerColumn']}
             rowClassName={styles['BookTable-rowColumn']}
-            rowGetter={({index}) => bookList[index]}
+            rowGetter={({index}) => list[index]}
             onRowClick={({rowData}) => {
               window.open(
                 `https://google.com/search?q=${encodeURIComponent(`${rowData.author.name} "${rowData.name}"`)}`
@@ -194,8 +129,7 @@ const BookTable: React.FC<IBookTableProps> = ({
 BookTable.defaultProps = {
   loading: true,
   sortBy: 'date',
-  sortDirection: SortDirection.DESC,
-  filterFunctions: {}
+  sortDirection: SortDirection.DESC
 }
 
 export default React.memo(BookTable);

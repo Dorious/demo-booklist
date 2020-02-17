@@ -25,6 +25,12 @@ export default (state: any, action: any) => {
         ...state,
         filters: action.payload
       }
+    
+    case 'setVisibleCount':
+      return {
+        ...state,
+        visibleCount: action.payload
+      }
 
     default:
       return state;

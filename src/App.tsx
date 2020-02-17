@@ -2,12 +2,14 @@ import React, { useReducer } from 'react';
 import styles from './App.module.scss';
 import reducer from "./reducer";
 import BookTable from './components/BookTable';
-import { SortDirectionType } from 'react-virtualized';
+import PageFilters from './components/PageFilters';
+import { SortDirectionType, SortDirection } from 'react-virtualized';
 
 // Create a context for the whole app
 export interface IAppState {
   loading: boolean;
   books: object[];
+  visibleCount: number,
   sortBy?: string;
   sortDirection?: SortDirectionType;
   filters: {
@@ -18,7 +20,10 @@ export interface IAppState {
 export const initialState: any  = {
   loading: false,
   books: [],
-  filters: {}
+  visibleCount: 0,
+  filters: {},
+  sortBy: 'date', // Publish date is default sort
+  sortDirection: SortDirection.DESC
 };
 
 export interface BaseAction {
@@ -53,6 +58,7 @@ const App: React.FC = () => {
       >
         <header className={styles['App-header']}>
           <h1>BookList Demo</h1>
+          <PageFilters />
           <section>
 
           </section>
