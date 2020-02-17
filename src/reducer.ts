@@ -18,6 +18,12 @@ export default (state: any, action: any) => {
         ...state,
         sortBy: action.payload.sortBy,
         sortDirection: action.payload.sortDirection
+      };
+
+    case 'changeFilters':
+      return {
+        ...state,
+        filters: action.payload
       }
 
     default:

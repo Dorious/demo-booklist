@@ -1,11 +1,11 @@
 import React, { useContext, useEffect } from 'react';
-import BookTable from './BookTable';
+import BookTable, { IBook } from './BookTable';
 import { AppContext } from '../../App';
 import axios from 'axios';
 
 const BookTableContainer: React.FC = () => {
   const [{
-    books, loading, sortBy, sortDirection
+    books, filters, loading, sortBy, sortDirection
   }, dispatch] = useContext(AppContext);
 
   useEffect(() => {
@@ -26,7 +26,13 @@ const BookTableContainer: React.FC = () => {
 
   return <BookTable 
     loading={loading} 
-    list={books} 
+    list={books}
+    filters={filters}
+    filterFunctions={{
+      author: (book: IBook, haystack: string[]) => {
+        return haystack.indexOf(book.author.gender) > -1;
+      }
+    }}
     sortBy={sortBy}
     sortDirection={sortDirection}
     sort={(info: any) => dispatch({

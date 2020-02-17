@@ -12,6 +12,7 @@
     "@types/react-dom": "^16.9.5",
     "@types/react-virtualized": "^9.21.8",
     "axios": "^0.19.2",
+    "md5": "^2.2.1",
     "moxios": "^0.4.0",
     "node-sass": "^4.13.1",
     "react": "^16.12.0",

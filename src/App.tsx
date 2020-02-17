@@ -6,18 +6,22 @@ import { SortDirectionType } from 'react-virtualized';
 
 // Create a context for the whole app
 export interface IAppState {
-  loading: boolean,
-  books: object[],
-  sortBy?: string,
-  sortDirection?: SortDirectionType
+  loading: boolean;
+  books: object[];
+  sortBy?: string;
+  sortDirection?: SortDirectionType;
+  filters: {
+    [prop: string]: string[]
+  }
 }
 
 export const initialState: any  = {
   loading: false,
-  books: []
+  books: [],
+  filters: {}
 };
 
-interface BaseAction {
+export interface BaseAction {
   type: string,
   payload?: any
 }
