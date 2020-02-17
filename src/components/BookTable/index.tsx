@@ -4,11 +4,11 @@ import { AppContext } from '../../App';
 import axios from 'axios';
 
 const BookTableContainer: React.FC = () => {
-  const [state, dispatch] = useContext(AppContext);
+  const [{books, loading}, dispatch] = useContext(AppContext);
 
   useEffect(() => {
     // Load book data on load
-    if(!state.books.length && !state.loading) {
+    if(!books.length && !loading) {
       dispatch({type: 'showLoading'});
 
       axios
@@ -22,7 +22,10 @@ const BookTableContainer: React.FC = () => {
     }
   });
 
-  return <BookTable list={state.books} />
+  return <BookTable 
+    loading={loading} 
+    list={books} 
+  />
 }
 
 export default BookTableContainer;

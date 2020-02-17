@@ -2,6 +2,7 @@ import React from 'react';
 import {AutoSizer, Column, Table} from 'react-virtualized';
 import 'react-virtualized/styles.css';
 import styles from './BookTable.module.scss';
+import loadingGif from './loading.gif';
  
 export interface IBook {
 	name: string,
@@ -17,12 +18,14 @@ export interface IBookTableProps {
 
 const BookTable: React.FC<IBookTableProps> = ({list, loading}) => {
   let loadingClass = styles['BookTable-loading'] + (
-    loading ? ' '+styles['BookTable-loading-'] : ''
+    loading ? ' '+styles['BookTable-loading-visible'] : ''
   );
 
 	return (
     <section role="table" className={styles['BookTable']}>
-      <div className={loadingClass} />
+      <div className={loadingClass}>
+        <img src={loadingGif} alt="Loading..." />
+      </div>
       <AutoSizer>
         {({height, width}) => (
           <Table

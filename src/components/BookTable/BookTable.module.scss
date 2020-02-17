@@ -7,5 +7,20 @@
 
   &-loading {
     position: absolute;
+    background: #fff;
+    top: 0;
+    right: 0;
+    left: 0;
+    bottom: 0;
+    z-index: 1;
+    opacity: 0;
+    transition: opacity 0.25s ease-in-out;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    &-visible {
+      opacity: 0.8;
+    }
   }
 }
