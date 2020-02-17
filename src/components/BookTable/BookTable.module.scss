@@ -8,7 +8,7 @@
   &-loading {
     position: absolute;
     background: #fff;
-    top: 0;
+    top: -10px;
     right: 0;
     left: 0;
     bottom: 0;
@@ -18,9 +18,34 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    pointer-events: none;
 
     &-visible {
       opacity: 0.8;
     }
+  }
+
+  &-rowColumn {
+    border-top: 1px solid #e1e1e1;
+    cursor: pointer;
+
+    & img {
+      vertical-align: middle;
+    }
+
+    &:hover {
+      background: #f1f1f1;
+    }
+  }
+
+  &-headerColumn {
+    display: flex;
+  }
+
+  &-headerRow {
+    overflow: visible ! important;
+    margin-top: -10px;
+    background: #f1f1f1;
+    cursor: default;
   }
 }

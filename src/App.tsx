@@ -2,12 +2,16 @@ import React, { useReducer } from 'react';
 import styles from './App.module.scss';
 import reducer from "./reducer";
 import BookTable from './components/BookTable';
+import { SortDirectionType } from 'react-virtualized';
 
 // Create a context for the whole app
 export interface IAppState {
   loading: boolean,
-  books: object[]
+  books: object[],
+  sortBy?: string,
+  sortDirection?: SortDirectionType
 }
+
 export const initialState: any  = {
   loading: false,
   books: []
@@ -43,6 +47,12 @@ const App: React.FC = () => {
         reducer={reducer} 
         initialState={initialState}
       >
+        <header className={styles['App-header']}>
+          <h1>BookList Demo</h1>
+          <section>
+
+          </section>
+        </header>
         <BookTable />
       </AppProvider>
     </div>

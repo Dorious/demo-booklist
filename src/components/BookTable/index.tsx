@@ -4,7 +4,9 @@ import { AppContext } from '../../App';
 import axios from 'axios';
 
 const BookTableContainer: React.FC = () => {
-  const [{books, loading}, dispatch] = useContext(AppContext);
+  const [{
+    books, loading, sortBy, sortDirection
+  }, dispatch] = useContext(AppContext);
 
   useEffect(() => {
     // Load book data on load
@@ -25,6 +27,12 @@ const BookTableContainer: React.FC = () => {
   return <BookTable 
     loading={loading} 
     list={books} 
+    sortBy={sortBy}
+    sortDirection={sortDirection}
+    sort={(info: any) => dispatch({
+      type: 'changeSorting',
+      payload: info
+    })}
   />
 }
 

@@ -13,6 +13,13 @@ export default (state: any, action: any) => {
         books: action.payload,
       };
 
+    case 'changeSorting':
+      return {
+        ...state,
+        sortBy: action.payload.sortBy,
+        sortDirection: action.payload.sortDirection
+      }
+
     default:
       return state;
   }
