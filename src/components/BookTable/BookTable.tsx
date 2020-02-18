@@ -3,7 +3,7 @@ import {AutoSizer, Column, Table, SortDirectionType, SortDirection } from 'react
 import 'react-virtualized/styles.css';
 import styles from './BookTable.module.scss';
 import loadingGif from './images/loading.gif';
-import { TableHeaderProps } from 'react-virtualized/dist/es/Table';
+import { TableHeaderProps, TableRowProps } from 'react-virtualized/dist/commonjs/Table';
 import { filteredHeader } from '../TableHeaderFilter';
 import md5 from 'md5';
 
@@ -37,6 +37,70 @@ export interface IBookTableProps {
   };
 }
 
+export function rowRenderer({
+  className,
+  columns,
+  index,
+  key,
+  onRowClick,
+  onRowDoubleClick,
+  onRowMouseOut,
+  onRowMouseOver,
+  onRowRightClick,
+  rowData,
+  style,
+}: TableRowProps) {
+  let a11yProps : any = {'aria-rowindex': index + 1};
+
+  if (
+    onRowClick ||
+    onRowDoubleClick ||
+    onRowMouseOut ||
+    onRowMouseOver ||
+    onRowRightClick
+  ) {
+    a11yProps['aria-label'] = 'row';
+    a11yProps.tabIndex = 0;
+
+    if (onRowClick) {
+      a11yProps.onClick = (event: React.MouseEvent<any, MouseEvent>) => onRowClick({event, index, rowData});
+    }
+    if (onRowDoubleClick) {
+      a11yProps.onDoubleClick = (event: React.MouseEvent<any, MouseEvent>) =>
+        onRowDoubleClick({event, index, rowData});
+    }
+    if (onRowMouseOut) {
+      a11yProps.onMouseOut = (event: React.MouseEvent<any, MouseEvent>) => onRowMouseOut({event, index, rowData});
+    }
+    if (onRowMouseOver) {
+      a11yProps.onMouseOver = (event: React.MouseEvent<any, MouseEvent>) => onRowMouseOver({event, index, rowData});
+    }
+    if (onRowRightClick) {
+      a11yProps.onContextMenu = (event: React.MouseEvent<any, MouseEvent>) =>
+        onRowRightClick({event, index, rowData});
+    }
+  }
+
+  let pD = new Date(rowData.date);
+  let dateString = `${pD.getMonth()}${pD.getDate()}`;
+
+  
+  if(rowData.genre === 'Horror' && dateString === '931') {
+    style.backgroundColor = '#ccc';
+  }
+
+  return (
+    <div
+      {...a11yProps}
+      className={className}
+      key={key}
+      role="row"
+      style={style}>
+      {columns}
+    </div>
+  );
+}
+
 const BookTable: React.FC<IBookTableProps> = ({
   filterSexes, filterGenres, list, loading, sort, sortBy, sortDirection
 }) => {
@@ -60,6 +124,7 @@ const BookTable: React.FC<IBookTableProps> = ({
             sort={sort}
             sortBy={sortBy}
             sortDirection={sortDirection}
+            rowRenderer={rowRenderer}
             headerRowRenderer={({
               className,
               columns,

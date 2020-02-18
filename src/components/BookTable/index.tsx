@@ -69,6 +69,8 @@ const BookTableContainer: React.FC = () => {
       // Collect genres and sexes
       filterGenres[a['genre']] = 1;
       filterSexes[a['author']['gender']] = 1;
+      filterGenres[b['genre']] = 1;
+      filterSexes[b['author']['gender']] = 1;
       
       // This is ugly and should be rectored:
       const aSort = sortBy === 'author' ? a['author']['name'] : a[sortBy];
