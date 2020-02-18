@@ -1,4 +1,15 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# Book List Demo
+
+Finished all task besides:
+"Indicate books in the "finance" genre, published on the last Friday of any month"
+There are no books with Finance genre :/
+
+## Used techs/libs
+1. TypeScript.
+2. React (with hooks and custom Reducer). Thought to use sessionStorage to keep state for faster develop.
+3. create-react-app generator.
+4. Sass + CSS Modules.
+5. react-virualized for scrollable table.
 
 ## Available Scripts
 
@@ -14,31 +25,20 @@ You will also see any lint errors in the console.
 
 ### `npm test`
 
-Launches the test runner in the interactive watch mode.<br />
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+Haven't focused on testing that is why this will blow.
 
 ### `npm run build`
 
 Builds the app for production to the `build` folder.<br />
 It correctly bundles React in production mode and optimizes the build for the best performance.
 
-The build is minified and the filenames include the hashes.<br />
-Your app is ready to be deployed!
+Use `serve` or `http-server` to run production build.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+```
+$ npm install -g http-server
+$ http-server build/
+```
 
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (Webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+## TODO
+1. Testing and code documentation.
+2. Sending ~27MB gzipped over the net is probably not the best idea. That is why data.json should be sent by the API and later use `InfiniteLoader` compontent inside `react-virtualized` Table.
