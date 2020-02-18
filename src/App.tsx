@@ -9,12 +9,12 @@ import { SortDirectionType, SortDirection } from 'react-virtualized';
 export interface IAppState {
   loading: boolean;
   books: object[];
-  visibleCount: number,
+  visibleCount: number;
   sortBy?: string;
   sortDirection?: SortDirectionType;
   filters: {
-    [prop: string]: string[]
-  }
+    [prop: string]: string[];
+  };
 }
 
 export const initialState: any  = {
@@ -27,10 +27,10 @@ export const initialState: any  = {
 };
 
 export interface BaseAction {
-  type: string,
-  payload?: any
+  type: string;
+  payload?: any;
 }
-const defaultContext: [any, React.Dispatch<BaseAction>] = [initialState, (action) => {}];
+const defaultContext: [any, React.Dispatch<BaseAction>] = [initialState, (action) => null];
 export const AppContext = React.createContext(defaultContext);
 AppContext.displayName = "AppContext";
 

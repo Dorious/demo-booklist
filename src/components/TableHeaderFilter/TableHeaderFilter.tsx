@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef, useContext } from 'react';
-import { TableHeaderProps, SortIndicator } from 'react-virtualized/dist/es/Table';
+import { TableHeaderProps, SortIndicator } from 'react-virtualized/dist/commonjs/Table';
 import styles from '../BookTable/BookTable.module.scss';
 import { AppContext } from '../../App';
 
@@ -13,7 +13,7 @@ export interface IHeaderFilterProps {
 const TableHeaderFilter: React.FC<IHeaderFilterProps> = ({dataKey, data}) => {
   const [{filters}, dispatch] = useContext(AppContext);
   const [visible, setVisible] = useState(false);
-  let containerRef: any = useRef();
+  const containerRef: any = useRef();
 
   const className = styles['BookTable-filter'] + (visible ? ' '+styles['BookTable-filter-visible'] : '');
   const currentFilters = dataKey && filters[dataKey] ? filters[dataKey] : [];
@@ -21,14 +21,14 @@ const TableHeaderFilter: React.FC<IHeaderFilterProps> = ({dataKey, data}) => {
   const getFiltersPayload = () => {
     if(!dataKey || !document) return filters;
 
-    let thisFilter: string[] = [];
+    const thisFilter: string[] = [];
 
     document.querySelectorAll('input[name^=filter]').forEach((node: Element) => {
-      let input = node as HTMLInputElement;
+      const input = node as HTMLInputElement;
       if(input.checked) thisFilter.push(input.value);
     });
     
-    let result = {...filters, [dataKey]: thisFilter};
+    const result = {...filters, [dataKey]: thisFilter};
     if(!thisFilter.length) delete result[dataKey];
 
     return result;
@@ -37,7 +37,7 @@ const TableHeaderFilter: React.FC<IHeaderFilterProps> = ({dataKey, data}) => {
   useEffect(() => {
     if(visible) {
       const documentOverlayClick = (event: MouseEvent) => {
-        let target : any = event.target as HTMLElement;
+        let target: any = event.target as HTMLElement;
 
         while(target !== null) {
           if(target === containerRef.current) break;

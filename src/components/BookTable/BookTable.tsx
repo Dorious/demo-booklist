@@ -15,8 +15,8 @@ export enum Genders {
 export interface IBook {
 	name: string;
 	author: {
-    name: string,
-    gender: Genders
+    name: string;
+    gender: Genders;
   };
   [prop: string]: any;
 }
@@ -28,19 +28,19 @@ export interface IBookTableProps {
   sortDirection?: SortDirectionType;
   sort?: any;
   filters: {
-    [prop: string]: string[]
+    [prop: string]: string[];
   };
   filterGenres: string[];
   filterSexes: string[];
   filterFunctions?: {
-    [prop: string]: (value: IBook, haystack: string[]) => boolean
-  }
+    [prop: string]: (value: IBook, haystack: string[]) => boolean;
+  };
 }
 
 const BookTable: React.FC<IBookTableProps> = ({
   filterSexes, filterGenres, list, loading, sort, sortBy, sortDirection
 }) => {
-  let loadingClass = styles['BookTable-loading'] + (
+  const loadingClass = styles['BookTable-loading'] + (
     loading ? ' '+styles['BookTable-loading-visible'] : ''
   );
 
@@ -90,7 +90,7 @@ const BookTable: React.FC<IBookTableProps> = ({
               flexGrow={1}
               width={width*.40}
               cellRenderer={({cellData, rowData, rowIndex}) => {
-                let img = rowData.image.replace(/460\/640$/, '34/48');
+                const img = rowData.image.replace(/460\/640$/, '34/48');
                 return <>
                   <img src={`${img}?${md5(JSON.stringify(rowData))}`} width={17} height={24} alt={cellData} /> {cellData}
                 </>

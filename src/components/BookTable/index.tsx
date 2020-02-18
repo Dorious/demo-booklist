@@ -4,21 +4,19 @@ import { AppContext } from '../../App';
 import axios from 'axios';
 import { SortDirection } from 'react-virtualized';
 
-// Memo container for sorted lists
-export interface IListMemo {
-  [prop: string]: any
-}
-let listMemo: IListMemo = {};
-
 // Collect genres and sexes after data loads
-let firstRun: boolean = true;
-let filterGenres: string[] = [];
-let filterSexes: string[] = [];
-
-export interface IFilterFunctions {
-  [prop: string]: any
+export interface BaseIndex {
+  [prop: string]: any;
 }
+const filterGenres: IListMemo = {};
+const filterSexes: IListMemo = {};
 
+// Memo container for sorted lists
+export type IListMemo = BaseIndex
+const listMemo: IListMemo = {};
+
+// This are functions to override .filter function for specific 'dataKey'
+export type IFilterFunctions = BaseIndex
 export const filterFunctions: IFilterFunctions = {
   author: (book: IBook, haystack: string[]) => {
     return haystack.indexOf(book.author.gender) > -1;
@@ -34,18 +32,18 @@ const BookTableContainer: React.FC = () => {
 
   // Add filter values to memo key
   const filterKeys = Object.keys(filters);
-  filterKeys.forEach((key:string) => {
+  filterKeys.forEach((key: string) => {
     if(filters[key].length) listMemoKey += ` ${key}:${filters[key].join('|')}`;
   });
 
   // Memorize the sort result so it doesn't do it everytime.
-  let bookList:IBook[] = listMemo[listMemoKey];
+  let bookList: IBook[] = listMemo[listMemoKey];
 
   // This could be refactored to separate function because looks ugly here.
   if(!bookList || !bookList.length) {
     console.log(`No memo for '${listMemoKey}', doin' it...`);
 
-    let dir = sortDirection === SortDirection.DESC ? -1 : 1;
+    const dir = sortDirection === SortDirection.DESC ? -1 : 1;
 
     // Clone list so we don't have reference.
     bookList = [...books];
@@ -53,10 +51,10 @@ const BookTableContainer: React.FC = () => {
     // Apply filters
     if(filterKeys.length) {
       bookList = bookList.filter((value: IBook) => {
-        let show: boolean = true;
+        let show = true;
 
         filterKeys.forEach((key: string) => {
-          let func = filterFunctions && typeof(filterFunctions[key]) === 'function' ? filterFunctions[key] : (value: IBook, haystack: string[]): boolean => {
+          const func = filterFunctions && typeof(filterFunctions[key]) === 'function' ? filterFunctions[key] : (value: IBook, haystack: string[]): boolean => {
             return haystack.indexOf(value[key]) > -1;
           };
 
@@ -67,27 +65,22 @@ const BookTableContainer: React.FC = () => {
       });
     }
 
-    bookList.sort((a, b) => {
+    const sorting = (a: IBook, b: IBook) => {
       // Collect genres and sexes
-      if(firstRun && filterGenres.indexOf(a['genre']) < 0)
-        filterGenres.push(a['genre']);
-      
-      if(firstRun && filterSexes.indexOf(a['author']['gender']) < 0)
-        filterSexes.push(a['author']['gender']);
+      filterGenres[a['genre']] = 1;
+      filterSexes[a['author']['gender']] = 1;
       
       // This is ugly and should be rectored:
-      let aSort = sortBy === 'author' ? a['author']['name'] : a[sortBy];
-      let bSort = sortBy === 'author' ? b['author']['name'] : b[sortBy];
+      const aSort = sortBy === 'author' ? a['author']['name'] : a[sortBy];
+      const bSort = sortBy === 'author' ? b['author']['name'] : b[sortBy];
 
       if(aSort===bSort) return 0;
       return aSort > bSort ? dir : -dir;
-    });
+    }
 
-    filterGenres.sort();
-    filterSexes.sort();
+    bookList.sort(sorting); 
     
     listMemo[listMemoKey] = bookList;
-    if(bookList.length) firstRun = false;
   }
   
   useEffect(() => {
@@ -114,12 +107,18 @@ const BookTableContainer: React.FC = () => {
 
   }, [books, loading, dispatch, bookList, visibleCount]);
 
+  const fG = Object.keys(filterGenres);
+  const fS = Object.keys(filterSexes);
+
+  fG.sort();
+  fS.sort();
+
   return <BookTable 
     loading={loading} 
     list={bookList}
     filters={filters}
-    filterGenres={filterGenres}
-    filterSexes={filterSexes}
+    filterGenres={fG}
+    filterSexes={fS}
     sortBy={sortBy}
     sortDirection={sortDirection}
     sort={(info: any) => dispatch({
