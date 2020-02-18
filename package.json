@@ -28,9 +28,8 @@
     "typescript": "^3.7.5"
   },
   "scripts": {
-    "prestart": "node ./node_modules/adm-zip-cli/cli.js public/data.json.zip public/",
+    "postinstall": "node ./node_modules/adm-zip-cli/cli.js public/data.json.zip public/",
     "start": "react-scripts start",
-    "prebuild": "npm run prestart",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "lint": "eslint ./src/ --ext ts,tsx --fix --quiet"
